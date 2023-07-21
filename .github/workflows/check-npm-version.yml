@@ -47,3 +47,6 @@ jobs:
           message: |
             **Hello, Please add your changes to CHANGELOG.md**
           allow-repeats: true
+      - name: test
+        run: |
+          echo "Changed files: ${{ steps.verify-changed-files.outputs.changed_files }}"
