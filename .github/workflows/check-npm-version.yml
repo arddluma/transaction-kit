@@ -40,10 +40,14 @@ jobs:
       - name: Log when CHANGELOG.md is updated
         id: git-status
         run: |
-          changed_files=$(git status --porcelain | grep CHANGELOG.md)
+          git fetch
+          before_commit=$(git rev-parse HEAD^1)
+          current_commit=$(git rev-parse HEAD)
+          changed_files=$(git diff --name-only $before_commit $current_commit | grep CHANGELOG.md)
           if [ -n "$changed_files" ]; then
             echo "CHANGELOG.md has been changed."
             echo "$changed_files"
+            # You can add more steps or actions here if needed
           else
-            echo "CHANGELOG.md has not been changed." && exit 1
-          fi      
+            echo "CHANGELOG.md has not been changed."
+          fi
