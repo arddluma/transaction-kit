@@ -41,8 +41,7 @@ jobs:
         id: git-status
         run: |
           git fetch
-          git reset --hard ${{ github.event.before }}
-          changed_files=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep CHANGELOG.md)
+          changed_files=$(git diff --name-only origin/main..${{ github.sha }} | grep CHANGELOG.md)
           if [ -n "$changed_files" ]; then
             echo "CHANGELOG.md has been changed."
             echo "$changed_files"
