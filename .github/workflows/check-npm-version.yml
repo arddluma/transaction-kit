@@ -38,12 +38,12 @@ jobs:
         if: steps.check.outputs.changed == 'false'
         run: echo "No version change :/ Please update version in package.json!" && exit 1
       - name: Log when CHANGELOG.md is updated
-        if: contains(steps.verify-changed-files.outputs.changed_files, 'CHANGELOG.md')
-        run: 'echo "Yayy!! CHANGELOG.md is updated!"'
-      - name: Log when CHANGELOG.md is not updated
-        if: steps.verify-changed-files.outputs.files_changed == 'false'
-        uses: mshick/add-pr-comment@v2
-        with:
-          message: |
-            **Hello, Please add your changes to CHANGELOG.md**
-          allow-repeats: true
+        id: git-status
+        run: |
+          changed_files=$(git status --porcelain | grep CHANGELOG.md)
+          if [ -n "$changed_files" ]; then
+            echo "CHANGELOG.md has been changed."
+            echo "$changed_files"
+          else
+            echo "CHANGELOG.md has not been changed." && exit 1
+          fi      
