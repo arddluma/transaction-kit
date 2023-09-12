@@ -37,8 +37,8 @@ jobs:
       - name: Exit if package version is not changed
         if: steps.check.outputs.changed == 'false'
         run: echo "No version change :/ Please update version in package.json!" && exit 1
-      - name: Log when CHANGELOG.md is updated
-        id: git-status
+      - name: Check if CHANGELOG.md is updated
+        id: changelog-status
         run: |
           git fetch origin ${{ github.base_ref }}:${{ github.base_ref }}
           changed_files=$(git diff --name-only ${{ github.base_ref }} ${{ github.sha }} | grep CHANGELOG.md)
@@ -47,5 +47,5 @@ jobs:
             echo "$changed_files"
             # You can add more steps or actions here if needed
           else
-            echo "CHANGELOG.md has not been changed."
+            echo "CHANGELOG.md has not been changed." && exit 1
           fi
