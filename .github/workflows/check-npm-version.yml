@@ -41,8 +41,8 @@ jobs:
         id: git-status
         run: |
           git fetch
-          before_commit=$(git rev-parse HEAD^1)
-          current_commit=$(git rev-parse HEAD)
+          before_commit=$(git rev-parse HEAD~1)  # Get the commit before the push
+          current_commit=$(git rev-parse HEAD)   # Get the current commit
           changed_files=$(git diff --name-only $before_commit $current_commit | grep CHANGELOG.md)
           if [ -n "$changed_files" ]; then
             echo "CHANGELOG.md has been changed."
